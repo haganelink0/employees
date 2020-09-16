@@ -1,7 +1,10 @@
-package com.itacademy.companyJobs;
+package com.itacademy.companyJobs.Service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.itacademy.companyJobs.Classes.Employee;
+import com.itacademy.companyJobs.Repository.EmployeeRepository;
 
 @Service
 public class EmployeeService {

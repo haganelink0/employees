@@ -1,4 +1,4 @@
-package com.itacademy.companyJobs;
+package com.itacademy.companyJobs.Classes;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
