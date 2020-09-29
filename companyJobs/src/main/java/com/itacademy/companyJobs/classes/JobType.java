@@ -1,4 +1,4 @@
-package com.itacademy.companyJobs.Classes;
+package com.itacademy.companyJobs.classes;
 
 public enum JobType {
 	DIRECTOR,

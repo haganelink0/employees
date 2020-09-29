@@ -1,4 +1,4 @@
-package com.itacademy.companyJobs.Classes;
+package com.itacademy.companyJobs.classes;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="Employees")
-public class Employee {
+public class EmployeeResponseDto extends ResponseDto {
 	
 	@Id
 	@Column(name = "Id")
@@ -47,18 +47,18 @@ public class Employee {
 		this.job = job;
 	}
 	
-	public Employee(Integer id) {
+	public EmployeeResponseDto(Integer id) {
 		this.id = id;
 	}
 
-	public Employee(Integer id, String name, JobType job) {
+	public EmployeeResponseDto(Integer id, String name, JobType job) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.job = job;
 	}
 
-	public Employee() {
+	public EmployeeResponseDto() {
 		super();
 	}
 	
