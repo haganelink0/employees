@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.itacademy.companyJobs.Service.EmployeeService;
 import com.itacademy.companyJobs.classes.EmployeeResponseDto;
+import com.itacademy.companyJobs.classes.JobType;
+
 
 @RestController
 @RequestMapping("/api")
@@ -26,46 +29,79 @@ public class EmployeeController {
 	
 	@Autowired
 	EmployeeService service;
+	HttpStatus hs = HttpStatus.NOT_FOUND; //base HttpStatus to use in multiple methods
+	EmployeeResponseDto employeeBase = null; //base employee to use in multiple methods
+	Iterable<EmployeeResponseDto> workerList = null;  //base list to use
 	
-	@GetMapping("/company")
-	public ResponseEntity<Iterable<EmployeeResponseDto>> showJobs () {
-		return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
+	@GetMapping("/company") //sends a list with all workers
+	public ResponseEntity<Iterable<EmployeeResponseDto>> showJobs () throws Exception {
+		
+		try {
+			workerList  = service.findAll();
+			hs = HttpStatus.OK;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseEntity<>(workerList, hs);
 	}
 	
-	@GetMapping("/users/{id}")
+	@GetMapping("/users/{id}") //sends a single worker
 	public ResponseEntity<EmployeeResponseDto> getEmployee(@PathVariable int id) throws Exception{
 
-		return new ResponseEntity<>(service.findbyId(id), HttpStatus.OK);
+		try {
+			employeeBase = service.findbyId(id);
+			hs = HttpStatus.OK;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new ResponseEntity<>(employeeBase, hs);
 	}
 	
-	@GetMapping("/users/{jobtype}")
-	public ResponseEntity<Iterable<EmployeeResponseDto>> showByJob(@PathVariable String job){
-		return new ResponseEntity<>(service.findByJob(job), HttpStatus.OK);
+	@GetMapping("/users/jobs/{jobtype}") //sends a list of workers by job
+	public ResponseEntity<Iterable<EmployeeResponseDto>> showByJob(@PathVariable JobType jobtype){
+		
+		return new ResponseEntity<>(service.findByJob(jobtype), HttpStatus.OK);
 	}
 
     @PostMapping(path="/employee", 
-    			 consumes="application/json")
-	public void insertEmployee (@RequestBody EmployeeResponseDto employee) {
-		
-		service.insertEmployee(employee);
+    			 consumes="application/json") //inserts a new worker on de database
+	public void insertEmployee (@RequestBody EmployeeResponseDto employee) throws Exception {
+		try {
+			service.insertEmployee(employee);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
     
     @PutMapping(path="/users/{id}",
     			produces="application/json",
-    			consumes="application/json")
-    public void editEmployee(@RequestBody EmployeeResponseDto employee, @PathVariable int id) {
-    	EmployeeResponseDto oldEmployee = service.findbyId(id);
-    	service.deleteEmployee(oldEmployee);
-    	service.insertEmployee(employee);
+    			consumes="application/json") //edits the worker selected
+    public void editEmployee(@RequestBody EmployeeResponseDto employee, @PathVariable int id) throws Exception {
+    	try {
+    		employeeBase = service.findbyId(id);
+        	service.deleteEmployee(employeeBase);
+        	service.insertEmployee(employee);
+    	}
+    	catch (Exception e) {
+    		e.printStackTrace();
+
+    	}
     }
 
-	@DeleteMapping("/users/{id}")
-	public void deleteEmployee(@PathVariable int id) {
+	@DeleteMapping("/users/{id}") //deletes the worker selected
+	public void deleteEmployee(@PathVariable int id) throws Exception {
 		
-		EmployeeResponseDto employee = service.findbyId(id);
-		
-		service.deleteEmployee(employee);
-
+		try {
+			employeeBase = service.findbyId(id);
+			service.deleteEmployee(employeeBase);
+		}
+		catch (Exception e) {
+			e.printStackTrace();	
+		}
 	}
 
 }

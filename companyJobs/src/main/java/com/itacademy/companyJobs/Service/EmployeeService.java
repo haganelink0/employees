@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import com.itacademy.companyJobs.Repository.EmployeeRepository;
 import com.itacademy.companyJobs.classes.EmployeeResponseDto;
+import com.itacademy.companyJobs.classes.JobType;
+
 
 @Service
 public class EmployeeService {
@@ -35,7 +37,8 @@ public class EmployeeService {
 		return null;
 	}
 	
-	public Iterable<EmployeeResponseDto> findByJob(String job){
+	public Iterable<EmployeeResponseDto> findByJob(JobType job){
+		
 		return repository.findByJob(job);
 	}
 	

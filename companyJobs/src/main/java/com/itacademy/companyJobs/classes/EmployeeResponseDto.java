@@ -2,8 +2,6 @@ package com.itacademy.companyJobs.classes;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -14,7 +12,6 @@ public class EmployeeResponseDto extends ResponseDto {
 	
 	@Id
 	@Column(name = "Id")
-	@GeneratedValue(strategy= GenerationType.AUTO, generator="native")
 	private Integer id;
 	@Column(name="name")
 	private String name;
