@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import com.itacademy.companyJobs.Service.EmployeeService;
 import com.itacademy.companyJobs.classes.EmployeeResponseDto;
@@ -23,7 +22,7 @@ import com.itacademy.companyJobs.classes.JobType;
 
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "http://localhost:8081", 
+@CrossOrigin(origins = "http://localhost:8080", 
 			 methods= {RequestMethod.GET, RequestMethod.POST})
 public class EmployeeController {
 	
