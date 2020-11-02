@@ -2,8 +2,8 @@ package com.itacademy.companyJobs.Repository;
 
 import org.springframework.data.repository.CrudRepository;
 
-import com.itacademy.companyJobs.classes.EmployeeResponseDto;
-import com.itacademy.companyJobs.classes.JobType;
+import com.itacademy.companyJobs.dto.EmployeeResponseDto;
+import com.itacademy.companyJobs.dto.JobType;
 
 
 public interface EmployeeRepository extends CrudRepository<EmployeeResponseDto,Integer> {

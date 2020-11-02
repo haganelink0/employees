@@ -1,6 +1,6 @@
 package com.itacademy.companyJobs.Controller;
 
-import com.itacademy.companyJobs.classes.EmployeeResponseDto;
+import com.itacademy.companyJobs.dto.EmployeeResponseDto;
 
 public class Validator {
 	

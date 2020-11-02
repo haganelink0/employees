@@ -1,6 +1,8 @@
 package com.itacademy.companyJobs.Controller;
 
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.itacademy.companyJobs.Controller.Exceptions.InvalidJsonException;
 import com.itacademy.companyJobs.Service.EmployeeService;
-import com.itacademy.companyJobs.classes.EmployeeResponseDto;
-import com.itacademy.companyJobs.classes.JobType;
+import com.itacademy.companyJobs.dto.EmployeeResponseDto;
+import com.itacademy.companyJobs.dto.JobType;
 
 
 @RestController
@@ -30,7 +32,7 @@ public class EmployeeController {
 	@Autowired
 	EmployeeService service;
 	HttpStatus hs = HttpStatus.NOT_FOUND; //base HttpStatus to use in multiple methods
-	EmployeeResponseDto employeeBase = null; //base employee to use in multiple methods
+	Optional<EmployeeResponseDto> worker = null; //base employee to use in multiple methods
 	Iterable<EmployeeResponseDto> workerList = null;  //base list to use
 	
 	@GetMapping("/company") //sends a list with all workers
@@ -49,11 +51,11 @@ public class EmployeeController {
 	@GetMapping("/users/{id}") //sends a single worker
 	public ResponseEntity<EmployeeResponseDto> getEmployee(@PathVariable int id) throws InvalidJsonException{
 
-		employeeBase = service.findbyId(id);
-		if (Boolean.FALSE.equals(Validator.isValid(employeeBase))) {
+		worker = service.findbyId(id);
+		if (worker.isEmpty()) {
 			throw new InvalidJsonException("Wrong id or user not found");
 		} else {
-			return new ResponseEntity<>(employeeBase, hs);
+			return new ResponseEntity<>(worker.get(), hs);
 		}
 
 	}
@@ -66,13 +68,16 @@ public class EmployeeController {
 
     @PostMapping(path="/employee", 
     			 consumes="application/json") //inserts a new worker on de database
-	public void insertEmployee (@RequestBody EmployeeResponseDto employee) throws InvalidJsonException {
+	public ResponseEntity<EmployeeResponseDto> insertEmployee (@RequestBody EmployeeResponseDto employee) throws InvalidJsonException {
     	
     	if (Boolean.TRUE.equals(Validator.isValid(employee))) {
     		service.insertEmployee(employee);
+    		
     	} else {
     		throw new InvalidJsonException("Invalid Json");
     	}
+    	
+    	return new ResponseEntity<>(employee, hs);
 	}
     
     @PutMapping(path="/users/{id}",
@@ -80,11 +85,11 @@ public class EmployeeController {
     			consumes="application/json") //edits the worker selected
     public void editEmployee(@RequestBody EmployeeResponseDto employee, @PathVariable int id) throws InvalidJsonException {
 
-    		employeeBase = service.findbyId(id);
-    		if (Boolean.FALSE.equals(Validator.isValid(employeeBase))) {
+    		worker = service.findbyId(id);
+    		if (worker.isEmpty()) {
     			throw new InvalidJsonException("User not found");
     		}
-        	service.deleteEmployee(employeeBase);
+        	service.deleteEmployee(worker.get());
         	if(Boolean.FALSE.equals(Validator.isValid(employee))) {
         		throw new InvalidJsonException("Invalid Json");
         	}
@@ -95,10 +100,10 @@ public class EmployeeController {
 	@DeleteMapping("/users/{id}") //deletes the worker selected
 	public void deleteEmployee(@PathVariable int id) throws InvalidJsonException {
 		
-		employeeBase = service.findbyId(id);
+		worker = service.findbyId(id);
 		
-		if (Boolean.TRUE.equals(Validator.isValid(employeeBase))) {
-			service.deleteEmployee(employeeBase);
+		if (worker.isPresent()) {
+			service.deleteEmployee(worker.get());
     	} else {
     		throw new InvalidJsonException("User Not Found");
     	}

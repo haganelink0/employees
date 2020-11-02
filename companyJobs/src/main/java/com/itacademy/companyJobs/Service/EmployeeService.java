@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.itacademy.companyJobs.Repository.EmployeeRepository;
-import com.itacademy.companyJobs.classes.EmployeeResponseDto;
-import com.itacademy.companyJobs.classes.JobType;
+import com.itacademy.companyJobs.dto.EmployeeResponseDto;
+import com.itacademy.companyJobs.dto.JobType;
 
 
 @Service
@@ -28,13 +28,8 @@ public class EmployeeService {
 		repository.delete(employee);
 	}
 
-	public EmployeeResponseDto findbyId(int id) {
-		Optional<EmployeeResponseDto> employee = repository.findById(id);
-		
-		if (employee.isPresent()) {
-			return employee.get();
-		}
-		return null;
+	public Optional<EmployeeResponseDto> findbyId(int id) {
+		return repository.findById(id);
 	}
 	
 	public Iterable<EmployeeResponseDto> findByJob(JobType job){
